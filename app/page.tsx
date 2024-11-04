@@ -17,7 +17,7 @@ export default function HomePage() {
         }}
       >
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="absolute inset-0"></div>
 
         {/* Main Content */}
         <div className="relative z-10 flex flex-col items-center justify-center h-full p-6">
@@ -33,7 +33,7 @@ export default function HomePage() {
           {/* Buttons */}
           <div className="flex space-x-6 mt-6">
             <Link href="/rooms" className="px-6 py-3 text-lg font-semibold text-black bg-orange-500 rounded-lg hover:bg-orange-400">
-              Book a Room
+              Practice Rooms
             </Link>
             <Link href="/equipment" className="px-6 py-3 text-lg font-semibold text-black bg-gray-200 rounded-lg hover:bg-gray-100">
               Browse Equipment
