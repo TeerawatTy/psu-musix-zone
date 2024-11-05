@@ -11,10 +11,12 @@ const Footer = () => {
         backgroundSize: "103%",
       }}
     >
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row justify-between items-center b-48">
         {/* Left Side: Logo and Text */}
         <div className="flex items-center space-x-3 mb-4 md:mb-0">
-          <img src="logo-2.png" alt="PSU Logo" className="h-28" />
+          <Link href="/" passHref>
+            <img src="logo-2.png" alt="PSU Musix Zone Logo" className="h-28" /> {/* Logo Image */}
+          </Link>
           <h1 className="text-2xl">PSU Musix Zone</h1>
         </div>
 
@@ -42,23 +44,23 @@ const Footer = () => {
       </div>
 
       {/* Bottom Section for Sponsor Logos */}
-      <div className="flex flex-wrap justify-center space-x-4 space-y-2 my-6">
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/guitar.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/classic-music.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/metronome.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/guitar-amp.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/micro.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/bass-drum.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/electronic-music.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/rock-music.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/xylophone.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/music-record.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/cello.png" alt="item" className="h-10" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/saxophone.png" alt="item" className="h-10" />
+      <div className="flex flex-wrap justify-center space-x-4 space-y-2 my-6 h-16">
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/guitar.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/classic-music.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/metronome.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/guitar-amp.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/micro.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/bass-drum.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/electronic-music.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/rock-music.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/xylophone.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/music-record.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/cello.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/saxophone.png" alt="item" className="h-10 hover:h-11" />
       </div>
 
 
-      <p className="text-center mt-10 text-gray-700">© 2024 PSU Musix Zone. All rights reserved.</p>
+      <p className="text-center mb-2 text-gray-700">© 2024 PSU Musix Zone. All rights reserved.</p>
     </footer>
   );
 };

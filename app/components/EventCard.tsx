@@ -11,7 +11,7 @@ interface EventCardProps {
 
 export default function EventCard({ imageSrc, title, description, link }: EventCardProps) {
     return (
-        <div className="p-4 bg-gray-800 rounded-lg">
+        <div className="p-4 bg-white rounded-lg shadow-md">
             <Image
                 src={imageSrc}
                 alt={title}
@@ -19,8 +19,8 @@ export default function EventCard({ imageSrc, title, description, link }: EventC
                 height={600}
                 className="rounded-t-lg mb-4 w-full h-auto"
             />
-            <h3 className="mb-2 text-2xl font-semibold text-center text-white">{title}</h3>
-            <p className="text-center text-gray-300">
+            <h3 className="mb-2 text-2xl font-semibold text-center text-black">{title}</h3>
+            <p className="text-center text-black">
                 {description}
             </p>
             <Link href={link} className="block mt-4 text-center text-orange-500 hover:underline">

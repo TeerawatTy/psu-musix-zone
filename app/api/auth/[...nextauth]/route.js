@@ -1,39 +1,37 @@
 // app/api/auth/[...nextauth]/route.js
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { hash, compare } from 'bcryptjs';
-import { PrismaClient } from '@prisma/client'; // Use this import
+import prisma from '../../../../node_modules/.prisma/client'; // Adjust the import based on your structure
+import { compare } from 'bcryptjs'; // Use bcrypt for password comparison
 
-const prisma = new PrismaClient();
+export const authOptions = {
+    providers: [
+        CredentialsProvider({
+            name: 'Credentials',
+            credentials: {
+                email: { label: "Email", type: "text" },
+                password: { label: "Password", type: "password" },
+            },
+            async authorize(credentials) {
+                const user = await prisma.user.findUnique({
+                    where: {
+                        email: credentials.email,
+                    },
+                });
 
-const authOptions = {
-  providers: [
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+                // Compare the hashed password
+                if (user && await compare(credentials.password, user.password)) {
+                    return user; // Return user object if authentication is successful
+                }
 
-        if (user && (await compare(credentials.password, user.password))) {
-          return user;
-        } else {
-          throw new Error('Invalid credentials');
-        }
-      },
-    }),
-  ],
-  pages: {
-    signIn: '/login',
-  },
-  session: {
-    strategy: 'jwt',
-  },
+                return null; // Return null if authentication fails
+            },
+        }),
+    ],
+    pages: {
+        signIn: '/login', // Custom sign-in page
+    },
 };
 
-const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+// Exporting the NextAuth handler for POST requests
+export const POST = (req, res) => NextAuth(req, res, authOptions);

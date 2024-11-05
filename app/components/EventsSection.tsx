@@ -4,14 +4,14 @@ import EventCard from './EventCard';
 export default function EventsSection() {
     return (
         <section
-            className="relative flex justify-center py-12 text-center w-full"
+            className="relative flex justify-center text-center w-full py-12"
             style={{
                 backgroundImage: 'url("/wallpaper-2.png")',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
             }}
         >
-            <div className="container mx-auto mt-10 px-4">
+            <div className="container mx-auto px-4">
                 <h2 className="my-8 text-5xl font-black text-center text-orange-900">Upcoming Events</h2>
 
                 <div className="mt-4 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
