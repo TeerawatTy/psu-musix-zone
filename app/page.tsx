@@ -8,7 +8,7 @@ export default function HomePage() {
     <div className="text-white min-h-screen w-full">
       {/* Main Content with Fixed-Size Background */}
       <div
-        className="relative flex flex-col items-center justify-center h-[720px] text-center"
+        className="relative flex flex-col items-center justify-center h-[960px] text-center"
         style={{
           backgroundImage: 'url("/wallpaper-3.png")',
           backgroundSize: '1920px 960px',

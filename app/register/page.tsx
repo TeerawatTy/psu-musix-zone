@@ -14,7 +14,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Replace with your actual registration logic
     try {
       // You would typically send a request to your API to create a new user
@@ -42,8 +42,15 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
+    <div className="flex items-center justify-center h-[720px] bg-gray-100"
+      style={{
+        backgroundImage: 'url("/wallpaper-2.png")',
+        backgroundSize: "1920px 960px",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-md">
         <h1 className="text-3xl font-semibold text-center text-gray-800">Register</h1>
         {error && <p className="text-red-500 text-center">{error}</p>}
         {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
