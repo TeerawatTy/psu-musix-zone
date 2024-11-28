@@ -42,8 +42,6 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Events Section */}
-      <EventsSection />
     </div>
   );
 }

@@ -1,45 +1,65 @@
-// app/components/EventsSection.tsx
-import EventCard from './EventCard';
+"use client"
 
-export default function EventsSection() {
-    return (
-        <section
-            className="relative flex justify-center text-center w-full py-12"
-            style={{
-                backgroundImage: 'url("/wallpaper-2.png")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
-        >
-            <div className="container mx-auto px-4">
-                <h2 className="my-8 text-5xl font-black text-center text-orange-900">Upcoming Events</h2>
+import { useEffect, useState } from "react";
 
-                <div className="mt-4 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    {/* Event 1 */}
-                    <EventCard
-                        imageSrc="/event-1.jpg"
-                        title="Music Jam Session"
-                        description="Join our regular jam sessions with fellow musicians."
-                        link="/events/jam-session"
-                    />
-
-                    {/* Event 2 */}
-                    <EventCard
-                        imageSrc="/event-2.jpg"
-                        title="Instrument Workshop"
-                        description="Attend workshops to learn and improve your skills."
-                        link="/events/workshop"
-                    />
-
-                    {/* Event 3 */}
-                    <EventCard
-                        imageSrc="/event-3.jpg"
-                        title="Annual Music Fest"
-                        description="Participate in our annual music festival and showcase your talent."
-                        link="/events/music-fest"
-                    />
-                </div>
-            </div>
-        </section>
-    );
+interface Event {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  date: string;
 }
+
+const EventsSection = () => {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("/api/events");
+
+        // Check if response is not OK
+        if (!response.ok) {
+          throw new Error("Failed to fetch events.");
+        }
+
+        const data = await response.json();
+        console.log("Fetched events:", data);
+        
+        if (data && data.length > 0) {
+          setEvents(data);
+        } else {
+          setError("No events found.");
+        }
+      } catch (err) {
+        console.error("Error fetching events:", err);
+        setError("Could not load events.");
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  return (
+    <div>
+      <h2>Upcoming Events</h2>
+      {error ? (
+        <p>{error}</p>
+      ) : (
+        <ul>
+          {events.map((event) => (
+            <li key={event.id}>
+              <h3>{event.title}</h3>
+              <p>{event.description}</p>
+              <img src={event.image} alt={event.title} />
+              <p>{new Date(event.date).toLocaleDateString()}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default EventsSection;

@@ -1,70 +1,27 @@
-// schema.prisma
-
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 model User {
-  id                Int                  @id @default(autoincrement())
-  username          String               @unique
-  email             String               @unique
-  password          String
-  role              String               // Use a String to represent role instead of enum
-  bookings          RoomReservation[]
-  borrowRequests    BorrowRequest[]
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  
+  posts     Post[]   // <-- Define the opposite relation here
 }
 
-model RoomReservation {
-  id                Int                  @id @default(autoincrement())
-  user              User                 @relation(fields: [userId], references: [id])
-  userId            Int
-  room              PracticeRoom         @relation(fields: [roomId], references: [id])
-  roomId            Int
-  reservation_date  DateTime
-  start_time        DateTime
-  end_time          DateTime
-}
-
-model BorrowRequest {
-  id                Int                  @id @default(autoincrement())
-  user              User                 @relation(fields: [userId], references: [id])
-  userId            Int
-  equipment         Equipment            @relation(fields: [equipmentId], references: [id])
-  equipmentId       Int
-  borrow_date       DateTime
-  return_date       DateTime
-  status            String               // Use String for status instead of enum
-  returnStatus      Boolean              @default(false)
-}
-
-model PracticeRoom {
-  id                Int                  @id @default(autoincrement())
-  room_name         String
-  capacity          Int
-  roomEquipments    RoomEquipment[]
-  reservations      RoomReservation[]
-}
-
-model Equipment {
-  id                Int                  @id @default(autoincrement())
-  name              String               @unique
-  type              String               // Use String for type instead of enum
-  defaultQuantity   Int                  @default(0)
-  status            String               // Use String for status instead of enum
-  roomEquipments    RoomEquipment[]
-  borrowRequests    BorrowRequest[]
-}
-
-model RoomEquipment {
-  id                Int                  @id @default(autoincrement())
-  room              PracticeRoom         @relation(fields: [roomId], references: [id])
-  roomId            Int
-  equipment         Equipment            @relation(fields: [equipmentId], references: [id])
-  equipmentId       Int
-  quantity          Int
+model Post {
+  id        Int      @id @default(autoincrement())
+  subject   String
+  detail    String
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }
