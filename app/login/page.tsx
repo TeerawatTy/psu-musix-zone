@@ -1,77 +1,76 @@
 // app/login/page.tsx
 
+
 "use client";
 
-import { useActionState } from "react"; // Update to use `useActionState`
-import { login } from "@/utils/loginUser"; // Ensure proper import
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import SubmitButton from "../components/SubmitButton"; // Adjust path if needed
-import { style } from "../constants/style"; // Adjust path if needed
+import React, { useState } from "react";
+import { loginUser } from "@/utils/loginUser";
+import { useRouter } from "next/navigation"; // To handle redirection after login
 
 export default function Login() {
-  const [data, action] = useActionState(login, {}); // Use `useActionState` instead of `useFormState`
+  const [data, setData] = useState({ email: "", password: "" });
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-  if (data.message) {
-    redirect("/");
-  }
+  // Handle form input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      // Validate user input
+      if (!data.email || !data.password) {
+        setError("Please fill in both fields.");
+        return;
+      }
+
+      // Call the login function
+      const result = await loginUser(data, false); // Pass 'remember' as false or true based on the user's choice
+      if (result.message === "Login Success") {
+        // Redirect to homepage or desired page after successful login
+        router.push("/");
+      }
+    } catch (err) {
+      console.error("Login failed:", err);
+      setError("Invalid credentials or server error. Please try again.");
+    }
+  };
 
   return (
     <div>
-      <h1>Login</h1>
-      <form action={action} className="mt-4">
-        <div className="flex flex-col mb-2">
-          <label htmlFor="email">Email</label>
+      <h2>Login</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Email</label>
           <input
-            className={style}
             type="email"
             name="email"
-            id="email"
+            value={data.email}
+            onChange={handleChange}
             required
           />
-          {data.error?.email && (
-            <div className="text-red-600">{data.error.email[0]}</div>
-          )}
         </div>
-        <div className="flex flex-col mb-4">
-          <label htmlFor="password">Password</label>
+        <div>
+          <label>Password</label>
           <input
-            className={style}
             type="password"
             name="password"
-            id="password"
+            value={data.password}
+            onChange={handleChange}
             required
           />
-          {data.error?.password && (
-            <div className="text-red-600">{data.error.password[0]}</div>
-          )}
         </div>
-        <div>
-          <input
-            className="w-6 h-6 mr-2 mb-6"
-            type="checkbox"
-            name="remember"
-            id="remember"
-          />
-          <label className="align-top" htmlFor="remember">
-            Remember me
-          </label>
-        </div>
-        <div>
-          {data.error?.message && (
-            <div className="text-red-600">{data.error.message}</div>
-          )}
-        </div>
-        <div>
-          {data.message ? (
-            <p>{data.message}</p>
-          ) : (
-            <SubmitButton label="Login" />
-          )}
-        </div>
+        <button type="submit">Login</button>
       </form>
-      <hr />
-      <Link href="/register">Don't have an account? Register</Link>
     </div>
   );
 }
