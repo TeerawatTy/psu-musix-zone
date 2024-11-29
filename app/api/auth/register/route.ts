@@ -1,65 +1,29 @@
-import prisma from '@/lib/prisma';
+// app/api/auth/register/route.ts
 
-export async function POST(req: Request) {
-  let body: any;
+import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/utils/db";
+import hashPassword from "@/utils/hashPassword";
+import { z } from "zod";
 
+const registerSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+export async function POST(req: NextRequest) {
   try {
-    // Raw body text received
-    const rawBody = await req.text();
-    console.log('Raw body received:', rawBody);
+    const body = await req.json();
+    const { name, email, password } = registerSchema.parse(body);
 
-    // Try to parse the body manually
-    body = rawBody ? JSON.parse(rawBody) : null;
+    const hashedPassword = await hashPassword(password);
 
-    // If the body is null or not an object, return an error
-    if (!body || typeof body !== 'object') {
-      return new Response(
-        JSON.stringify({ error: 'Invalid request body or missing fields' }),
-        { status: 400 }
-      );
-    }
-
-    // Extract values from the body
-    const { email, password, name } = body;
-
-    // Validate the fields
-    if (!email || !password || !name) {
-      return new Response(
-        JSON.stringify({ error: 'Email, password, and name are required' }),
-        { status: 400 }
-      );
-    }
-
-    // Check if the user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
+    const user = await prisma.user.create({
+      data: { name, email, password: hashedPassword },
     });
 
-    if (existingUser) {
-      return new Response(
-        JSON.stringify({ error: 'User already exists' }),
-        { status: 400 }
-      );
-    }
-
-    // Create the new user
-    const newUser = await prisma.user.create({
-      data: { email, password, name },
-    });
-
-    // Return a success message
-    return new Response(
-      JSON.stringify({ message: 'User created successfully', user: newUser }),
-      { status: 201 }
-    );
-
+    return NextResponse.json({ message: "User registered successfully!" }, { status: 201 });
   } catch (error) {
-    console.error('Error during user creation:', error);
-
-    // Return a generic server error message
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }

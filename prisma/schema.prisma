@@ -8,20 +8,26 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  
-  posts     Post[]   // <-- Define the opposite relation here
+  id            Int           @id @default(autoincrement())
+  name          String
+  email         String        @unique
+  password      String
+  role          String        @default("user") // Default role is "user"
+  reservations  Reservation[] // One-to-many relation with Reservation
 }
 
-model Post {
+model Reservation {
   id        Int      @id @default(autoincrement())
-  subject   String
-  detail    String
-  createdAt DateTime @default(now())
-  userId    Int
+  userId    Int      // Foreign key to the User model
   user      User     @relation(fields: [userId], references: [id])
+  roomName  String
+  date      DateTime
+  approved  Boolean  @default(false) // Indicates whether the reservation is approved
+}
+
+model Event {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  date      DateTime
 }
