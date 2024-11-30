@@ -17,13 +17,20 @@ model User {
 }
 
 model Reservation {
-  id        Int      @id @default(autoincrement())
-  userId    Int      // Foreign key to the User model
-  user      User     @relation(fields: [userId], references: [id])
-  roomName  String
-  date      DateTime
-  approved  Boolean  @default(false) // Indicates whether the reservation is approved
+  id          Int      @id @default(autoincrement())  // Primary key
+  userId      Int      // Foreign key to the User model
+  user        User     @relation(fields: [userId], references: [id])  // User related to this reservation
+  roomNumber  Int      // Room number (1, 2, 3)
+  date        DateTime // Date of the reservation
+  startTime   DateTime // Start time of the reservation (e.g., 8:00 AM)
+  endTime     DateTime // End time of the reservation (calculated automatically, 2 hours later)
+  phoneNumber String   // User's phone number for the reservation
+  approved    Boolean  @default(false)  // If the reservation is approved by the admin
+  createdAt   DateTime @default(now()) // Reservation creation timestamp
+  updatedAt   DateTime @updatedAt      // Automatically updates when reservation is updated
 }
+
+
 
 model Event {
   id        Int      @id @default(autoincrement())

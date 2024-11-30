@@ -103,7 +103,28 @@ export async function logoutUser() {
   }
 }
 
-// Function to get the session from the cookies
+// // Function to get the session from the cookies
+// export async function getSession() {
+//   const cookiesResponse = await cookies();
+//   const session = cookiesResponse.get("session")?.value;
+
+//   console.log("Checking session cookie:", session);  // Debug log
+
+//   if (!session) {
+//     console.log("No session cookie found");  // Debug log
+//     return null;
+//   }
+
+//   try {
+//     const { payload } = await jwtVerify(session, key, { algorithms: ["HS256"] });
+//     console.log("Session payload decoded:", payload);  // Debug log
+//     return payload; // Return the session data (e.g., { id, email, name })
+//   } catch (error) {
+//     console.error("Error verifying session:", error);
+//     return null;
+//   }
+// }
+
 export async function getSession() {
   const cookiesResponse = await cookies();
   const session = cookiesResponse.get("session")?.value;
@@ -112,15 +133,15 @@ export async function getSession() {
 
   if (!session) {
     console.log("No session cookie found");  // Debug log
-    return null;
+    return null;  // Return null if no session is found
   }
 
   try {
     const { payload } = await jwtVerify(session, key, { algorithms: ["HS256"] });
     console.log("Session payload decoded:", payload);  // Debug log
-    return payload; // Return the session data (e.g., { id, email, name })
+    return payload;  // Return decoded payload (user data)
   } catch (error) {
-    console.error("Error verifying session:", error);
+    console.error("Error verifying session:", error);  // Error handling
     return null;
   }
 }

@@ -5,10 +5,10 @@ import EventsSection from './components/EventsSection';
 
 export default function HomePage() {
   return (
-    <div className="text-white min-h-screen w-full">
+    <div className="text-white w-full">
       {/* Main Content with Fixed-Size Background */}
       <div
-        className="relative flex flex-col items-center justify-center h-[960px] text-center"
+        className="relative flex flex-col items-center justify-center h-[720px] text-center"
         style={{
           backgroundImage: 'url("/wallpaper-3.png")',
           backgroundSize: '1920px 960px',
@@ -32,11 +32,11 @@ export default function HomePage() {
 
           {/* Buttons */}
           <div className="flex space-x-6 mt-6">
-            <Link href="/rooms" className="px-6 py-3 text-lg font-semibold text-black bg-orange-500 rounded-lg hover:bg-orange-400">
-              Practice Rooms
+            <Link href="/room" className="px-6 py-3 text-xl font-semibold text-black bg-orange-500 rounded-lg hover:bg-orange-400">
+              Reserve Rooms
             </Link>
-            <Link href="/equipment" className="px-6 py-3 text-lg font-semibold text-black bg-gray-200 rounded-lg hover:bg-gray-100">
-              Browse Equipment
+            <Link href="/equipment" className="px-6 py-3 text-xl font-semibold text-black bg-gray-200 rounded-lg hover:bg-gray-100">
+              Up Coming Events
             </Link>
           </div>
         </div>

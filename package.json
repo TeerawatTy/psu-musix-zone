@@ -7,10 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "npx prisma db seed" 
+    "seed": "npx prisma db seed"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "axios": "^1.7.8",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
