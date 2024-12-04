@@ -56,3 +56,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'Something went wrong. Please try again later.' }, { status: 500 });
   }
 }
+
+
+export async function GET(req: NextRequest) {
+  try {
+    // Fetch reservations from the database
+    const reservations = await prisma.reservation.findMany({
+      where: {
+        endTime: { gte: new Date() }, // Fetch upcoming reservations
+      },
+    });
+
+    // Return the reservations as JSON
+    return NextResponse.json({ reservations });
+  } catch (error) {
+    console.error("Error fetching reservations:", error);
+    return NextResponse.json({ message: 'Failed to fetch reservations.' }, { status: 500 });
+  }
+}
