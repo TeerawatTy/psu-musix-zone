@@ -2,144 +2,110 @@
 
 "use client"; // Ensure this file is treated as a Client Component
 
-import { useState } from "react";
-import axios from "axios";
+import { useState } from 'react';
 
-const ReserveRoomForm = () => {
-  const [reservationName, setReservationName] = useState("");
-  const [roomNumber, setRoomNumber] = useState("");
-  const [date, setDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+const ReservationForm = () => {
+  const [formData, setFormData] = useState({
+    roomNumber: '',
+    startTime: '',
+    phoneNumber: '',
+  });
 
-  const handleSubmit = async (e) => {
+  // Handles input change
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handles form submission
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Reset errors before submitting
-    setErrorMessage("");
-
-    // Basic validation
-    if (!reservationName || !roomNumber || !date || !startTime || !phoneNumber) {
-      setErrorMessage("All fields are required.");
-      return;
+    // Ensure no fields are empty
+    for (const key in formData) {
+      if (!formData[key as keyof typeof formData]) {
+        alert(`Please fill in the ${key}`);
+        return;
+      }
     }
-
-    // Ensure start time is between 08:00 and 18:00
-    const startTimeHour = parseInt(startTime.split(":")[0], 10);
-    if (startTimeHour < 8 || startTimeHour >= 18) {
-      setErrorMessage("Start time must be between 08:00 and 18:00.");
-      return;
-    }
-
-    // Calculate check-in and check-out times
-    const checkIn = new Date(`${date}T${startTime}:00`);
-    const checkOut = new Date(checkIn.getTime() + 2 * 60 * 60 * 1000); // 2 hours later
-
-    setLoading(true); // Start loading state
 
     try {
-      const response = await axios.post("/api/reservation", {
-        reservationName,
-        roomNumber,
-        date,
-        startTime,
-        phoneNumber,
-        checkIn: checkIn.toISOString(),
-        checkOut: checkOut.toISOString(),
+      const response = await fetch('/api/reservation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-      alert(response.data.message); // Show success message
 
-      // Optionally, clear form fields on success
-      setReservationName("");
-      setRoomNumber("");
-      setDate("");
-      setStartTime("");
-      setPhoneNumber("");
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message}`);
+        return;
+      }
+
+      const data = await response.json();
+      console.log(data);
+
+      // Optionally reset the form or show success message
+      alert('Reservation successful!');
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || "Something went wrong.");
-    } finally {
-      setLoading(false); // End loading state
+      console.error('Error submitting reservation:', error);
+      alert('An unexpected error occurred. Please try again later.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 max-w-md mx-auto bg-white shadow-md rounded-md text-black">
-      <h2 className="text-2xl font-bold">Reserve a Room</h2>
+    <div className="max-w-lg mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Make a Reservation</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="form-group">
+          <label htmlFor="roomNumber" className="block text-sm font-medium text-gray-700">Room Number</label>
+          <input
+            type="number"
+            id="roomNumber"
+            name="roomNumber"
+            value={formData.roomNumber}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Enter room number"
+          />
+        </div>
 
-      <div>
-        <label className="block text-sm font-semibold">Reservation Name</label>
-        <input
-          type="text"
-          value={reservationName}
-          onChange={(e) => setReservationName(e.target.value)}
-          required
-          className="w-full px-4 py-2 border rounded-md"
-        />
-      </div>
+        <div className="form-group">
+          <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">Start Time</label>
+          <input
+            type="datetime-local"
+            id="startTime"
+            name="startTime"
+            value={formData.startTime}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
 
-      <div>
-        <label className="block text-sm font-semibold">Room Number</label>
-        <select
-          value={roomNumber}
-          onChange={(e) => setRoomNumber(e.target.value)}
-          required
-          className="w-full px-4 py-2 border rounded-md"
-        >
-          <option value="">Select Room</option>
-          <option value="1">Room 1</option>
-          <option value="2">Room 2</option>
-          <option value="3">Room 3</option>
-        </select>
-      </div>
+        <div className="form-group">
+          <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Enter phone number"
+          />
+        </div>
 
-      <div>
-        <label className="block text-sm font-semibold">Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-          className="w-full px-4 py-2 border rounded-md"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-semibold">Start Time</label>
-        <input
-          type="time"
-          value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
-          required
-          className="w-full px-4 py-2 border rounded-md"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-semibold">Phone Number</label>
-        <input
-          type="tel"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          required
-          pattern="^\d{10}$"  // Accepts exactly 10 digits
-          className="w-full px-4 py-2 border rounded-md"
-        />
-
-      </div>
-
-      <button
-        type="submit"
-        className={`w-full bg-blue-500 text-white py-2 rounded-md ${loading ? 'bg-blue-300 cursor-not-allowed' : 'hover:bg-blue-600'}`}
-        disabled={loading}
-      >
-        {loading ? "Submitting..." : "Reserve Room"}
-      </button>
-
-      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
-    </form>
+        <button type="submit" className="w-full py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 
-export default ReserveRoomForm;
+export default ReservationForm;

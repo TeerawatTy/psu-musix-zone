@@ -56,12 +56,7 @@ export default function LoginPage() {
   return (
     <div
       className="flex items-center justify-center h-[720px] bg-gray-100"
-      style={{
-        backgroundImage: 'url("/wallpaper-2.png")',
-        backgroundSize: "1920px 960px",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-      }}
+
     >
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-md">
         <h1 className="text-3xl font-semibold text-center text-gray-800">Login</h1>

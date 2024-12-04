@@ -103,6 +103,75 @@ export async function logoutUser() {
   }
 }
 
+export async function getSession() {
+  const cookiesResponse = await cookies();
+  const session = cookiesResponse.get("session")?.value;
+
+  console.log("Checking session cookie:", session);  // Debug log
+
+  if (!session) {
+    console.log("No session cookie found");  // Debug log
+    return null;  // Return null if no session is found
+  }
+
+  try {
+    const { payload } = await jwtVerify(session, key, { algorithms: ["HS256"] });
+    console.log("Session payload decoded:", payload);  // Debug log
+    if (payload && payload.id && payload.email) {
+      return payload;  // Ensure the payload contains necessary fields before returning
+    } else {
+      console.error("Invalid session payload:", payload);  // Debug log
+      return null;  // Return null if payload is invalid or incomplete
+    }
+  } catch (error) {
+    console.error("Error verifying session:", error);  // Error handling
+    return null;  // Return null if session verification fails
+  }
+}
+
+
+// // ---------------- Best Version ----------------------
+// export async function getSession() {
+//   const cookiesResponse = await cookies();
+//   const session = cookiesResponse.get("session")?.value;
+
+//   console.log("Checking session cookie:", session);  // Debug log
+
+//   if (!session) {
+//     console.log("No session cookie found");  // Debug log
+//     return null;  // Return null if no session is found
+//   }
+
+//   try {
+//     const { payload } = await jwtVerify(session, key, { algorithms: ["HS256"] });
+//     console.log("Session payload decoded:", payload);  // Debug log
+//     return payload;  // Return decoded payload (user data)
+//   } catch (error) {
+//     console.error("Error verifying session:", error);  // Error handling
+//     return null;
+//   }
+// }
+
+
+// export async function getSession(token: string) {
+//   try {
+//     const cookiesResponse = await cookies();
+//     const session = token;  // Now we accept the token directly from the client request
+
+//     if (!session) {
+//       console.log("No session cookie found");
+//       return null;
+//     }
+
+//     const { payload } = await jwtVerify(session, key, { algorithms: ["HS256"] });
+//     console.log("Session payload decoded:", payload);
+//     return payload; // Return decoded payload (user data)
+//   } catch (error) {
+//     console.error("Error verifying session:", error);
+//     return null;
+//   }
+// }
+
 // // Function to get the session from the cookies
 // export async function getSession() {
 //   const cookiesResponse = await cookies();
@@ -125,26 +194,7 @@ export async function logoutUser() {
 //   }
 // }
 
-export async function getSession() {
-  const cookiesResponse = await cookies();
-  const session = cookiesResponse.get("session")?.value;
 
-  console.log("Checking session cookie:", session);  // Debug log
-
-  if (!session) {
-    console.log("No session cookie found");  // Debug log
-    return null;  // Return null if no session is found
-  }
-
-  try {
-    const { payload } = await jwtVerify(session, key, { algorithms: ["HS256"] });
-    console.log("Session payload decoded:", payload);  // Debug log
-    return payload;  // Return decoded payload (user data)
-  } catch (error) {
-    console.error("Error verifying session:", error);  // Error handling
-    return null;
-  }
-}
 
 // export async function getSession() {
 //   try {
