@@ -1,16 +1,16 @@
-// app/room/form.tsx
+// app/admin/EditForm.tsx
 
 "use client"; // Ensure this file is treated as a Client Component
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Calendar from "../components/Calendar"; // Import Calendar Component
 
-const ReservationForm = () => {
+const EditForm = ({ reservation, onSubmit, onCancel }: any) => {
   const [formData, setFormData] = useState({
-    roomNumber: "",
-    phoneNumber: "",
-    startTime: "", // Track start time
-    endTime: "",   // Track end time
+    roomNumber: reservation.roomNumber || "",
+    phoneNumber: reservation.phoneNumber || "",
+    startTime: reservation.startTime || "",
+    endTime: reservation.endTime || "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -29,81 +29,109 @@ const ReservationForm = () => {
   // Handles form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("Reservation Data before submission:", formData);
-
-    // Ensure no fields are empty
+  
+    // Ensure all fields are filled
     for (const key in formData) {
       if (!formData[key as keyof typeof formData]) {
         alert(`Please fill in the ${key}`);
         return;
       }
     }
-
+  
     setLoading(true);
     setError("");
     setSuccess(false);
-
+  
     try {
-      const response = await fetch("/api/reservation", {
-        method: "POST",
+      const response = await fetch(`/api/reservation/${reservation.id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData), // Send formData including startTime and endTime
+        body: JSON.stringify(formData),
       });
-
+  
+      const text = await response.text(); // Get raw response text
+  
       if (!response.ok) {
-        const errorData = await response.json();
-        setError(`Error: ${errorData.message}`);
+        // Try to parse JSON if possible, otherwise use the raw text
+        let errorMessage = text;
+        try {
+          const errorData = JSON.parse(text);
+          errorMessage = errorData.message || 'An error occurred';
+        } catch (e) {
+          // If it's not valid JSON, use the raw response text
+          errorMessage = "An unexpected error occurred.";
+        }
+  
+        setError(`Error: ${errorMessage}`);
         return;
       }
-
-      const data = await response.json();
-      console.log(data);
-
+  
+      const data = JSON.parse(text); // Parse the valid JSON response
+  
+      console.log("Updated Reservation:", data);
+  
       setSuccess(true);
-      setFormData({
-        roomNumber: "",
-        phoneNumber: "",
-        startTime: "",
-        endTime: "",
-      }); // Reset form after successful submission
-
-      alert("Reservation successful!");
+      onSubmit(formData); // Trigger onSubmit from parent (AdminPage)
+      alert("Reservation updated successfully!");
     } catch (error) {
-      console.error("Error submitting reservation:", error);
+      console.error("Error updating reservation:", error);
       setError("An unexpected error occurred. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
+  
+  
+  
 
   // Handles date selection from Calendar
-  const handleDateSelect = (date: Date) => {
-    // Adjust the date to the local time (no timezone offset adjustment)
-    const localDate = new Date(date);
-
-    // Ensure we are storing and displaying the correct local start time
-    const formattedStartTime = localDate.toLocaleString(); // Use local time format for display
-
-    // Calculate end time (e.g., adding 2 hours for the reservation)
-    const calculatedEndTime = new Date(localDate);
-    calculatedEndTime.setHours(localDate.getHours() + 2); // Adding 2 hours
-
-    setFormData((prevData) => ({
-      ...prevData,
-      startTime: formattedStartTime, // Use the formatted start time
-      endTime: calculatedEndTime.toLocaleString(), // Use calculated end time
-    }));
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this reservation?")) {
+      return;
+    }
+  
+    setLoading(true);
+    setError("");
+    setSuccess(false);
+  
+    try {
+      const response = await fetch(`/api/reservation/${reservation.id}`, {
+        method: "DELETE",
+      });
+  
+      const text = await response.text(); // Log raw response text
+  
+      if (!response.ok) {
+        let errorMessage = text;
+        try {
+          const errorData = JSON.parse(text);
+          errorMessage = errorData.message || 'Error occurred while deleting';
+        } catch (e) {
+          errorMessage = "An unexpected error occurred.";
+        }
+  
+        setError(`Error: ${errorMessage}`);
+        return;
+      }
+  
+      alert("Reservation deleted successfully!");
+      onCancel(); // Call cancel or update the state in parent component to reflect the deletion
+    } catch (error) {
+      console.error("Error deleting reservation:", error);
+      setError("An unexpected error occurred. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
-
+  
   return (
     <div className="max-w-lg mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Make a Reservation</h2>
+      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Edit Reservation</h2>
 
       {/* Display success or error messages */}
-      {success && <div className="text-green-500 text-center mb-4">Reservation was successful!</div>}
+      {success && <div className="text-green-500 text-center mb-4">Reservation was updated!</div>}
       {error && <div className="text-red-500 text-center mb-4">{error}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -163,11 +191,20 @@ const ReservationForm = () => {
           disabled={loading}
           className={`w-full py-2 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${loading ? 'bg-gray-400' : 'bg-orange-500 hover:bg-orange-600'}`}
         >
-          {loading ? "Submitting..." : "Submit"}
+          {loading ? "Submitting..." : "Update Reservation"}
         </button>
       </form>
+
+      <div className="mt-4 text-center">
+        <button
+          onClick={onCancel}
+          className="text-gray-500 hover:text-gray-700"
+        >
+          Cancel
+        </button>
+      </div>
     </div>
   );
 };
 
-export default ReservationForm;
+export default EditForm;

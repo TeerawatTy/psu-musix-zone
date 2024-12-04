@@ -1,9 +1,10 @@
-// room/ReservationList.tsx
+// app/components/ReservationList.tsx
 
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaPhoneAlt, FaClock, FaCalendarAlt } from "react-icons/fa"; // You can use icons for better readability
+import { FaPhoneAlt, FaClock, FaCalendarAlt } from "react-icons/fa"; // Icons for readability
+import { useRouter } from "next/navigation"; // For navigation after editing
 
 // Define the Reservation interface for TypeScript
 interface Reservation {
@@ -18,6 +19,8 @@ const ReservationList = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false); // To track if the user is an admin
+  const router = useRouter();
 
   // Fetch reservations from the API
   const fetchReservations = async () => {
@@ -38,9 +41,38 @@ const ReservationList = () => {
     }
   };
 
+  // Check if the user is an admin
   useEffect(() => {
-    fetchReservations(); // Initial fetch on component mount
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user?.role === "admin") {
+      setIsAdmin(true); // Set admin status
+    }
+    fetchReservations(); // Fetch reservations after user check
   }, []);
+
+  // Handle editing a reservation
+  const handleEdit = (id: number) => {
+    console.log("Editing reservation with ID:", id);
+    // You can either navigate to an edit page or show a modal here
+    router.push(`/admin/edit/${id}`); // Assuming you have an edit page
+  };
+
+  // Handle deleting a reservation
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(`/api/reservation/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setReservations(reservations.filter((reservation) => reservation.id !== id));
+        alert("Reservation deleted successfully");
+      } else {
+        alert("Failed to delete reservation");
+      }
+    } catch (err) {
+      console.error("Error deleting reservation:", err);
+    }
+  };
 
   return (
     <div className="w-full space-y-6 text-black">
@@ -52,7 +84,7 @@ const ReservationList = () => {
       )}
 
       {/* Scrollable reservation list */}
-      <div className="grid grid-cols-1 gap-6 max-h-[720px] overflow-y-auto">
+      <div className="grid grid-cols-1 gap-6 max-h-[960px] overflow-y-auto">
         {reservations.map((reservation) => (
           <div
             key={reservation.id}
@@ -86,6 +118,24 @@ const ReservationList = () => {
                 <strong>Reservation Date:</strong> {new Date(reservation.startTime).toLocaleDateString()}
               </span>
             </div>
+
+            {/* Admin Edit and Delete Buttons */}
+            {isAdmin && (
+              <div className="flex space-x-4 mt-4">
+                <button
+                  onClick={() => handleEdit(reservation.id)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(reservation.id)}
+                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>

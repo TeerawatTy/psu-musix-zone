@@ -1,4 +1,5 @@
 // utils/loginUser.ts
+
 "use server"
 
 import { SignJWT, jwtVerify } from "jose"; 
@@ -32,58 +33,92 @@ export async function decrypt(input: string): Promise<any> {
   return payload;
 }
 
-// Function to login the user and set session cookie
-export async function loginUser(userInput: any, remember: boolean) { 
+// Static admin credentials
+const ADMIN_CREDENTIALS = {
+  email: "admin@mail.com",
+  password: "123123", // Store a secure hashed version in production!
+  name: "Admin",
+  role: "admin",
+};
+
+export async function loginUser(userInput: any, remember: boolean) {
   const { email, password } = userInput;
 
-  console.log("Login attempt for email:", email);  // Debug log
+  console.log("Login attempt for email:", email); // Debug log
 
-  let timeout = TIMEOUT; // default to 5 minutes
+  let timeout = TIMEOUT; // Default session timeout
   if (remember) timeout = 24 * 60 * 60; // 1 day if "remember me" is checked
 
   try {
-    // Validate the user's credentials
+    // Static admin credentials
+    if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+      console.log("Static admin user authenticated"); // Debug log
+
+      const sessionData = {
+        id: "admin",
+        email: ADMIN_CREDENTIALS.email,
+        name: ADMIN_CREDENTIALS.name,
+        role: ADMIN_CREDENTIALS.role,
+      };
+      const session = await encrypt(sessionData);
+
+      const expires = new Date(Date.now() + timeout * 1000);
+      const cookiesResponse = await cookies();
+      cookiesResponse.set("session", session, {
+        expires,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict",
+      });
+
+      console.log("Admin session created:", sessionData); // Debug log
+
+      // Return with redirect URL for admin
+      return { message: "Admin Login Success", redirectTo: "/admin" };
+    }
+
+    // Validate credentials for regular users
     const user = await prisma.user.findUnique({
       where: { email },
     });
 
     if (!user) {
-      console.log("User not found for email:", email);  // Debug log
+      console.log("User not found for email:", email); // Debug log
       return { error: { message: "User not found" } };
     }
 
-    console.log("User found:", user);  // Debug log
+    console.log("User found:", user); // Debug log
 
-    // Validate password (hash input password and compare with stored hash)
+    // Validate the password using your hashing logic
     const inputHash = await hashPassword(password);
-    console.log("Input password hash: ", inputHash); // Debug log
-    console.log("Stored password hash: ", user.password); // Debug log
+    console.log("Input password hash:", inputHash);
+    console.log("Stored password hash:", user.password);
 
-    // Compare the hashes directly
     if (inputHash !== user.password) {
-      console.log("Incorrect password for email:", email);  // Debug log
+      console.log("Incorrect password for email:", email); // Debug log
       return { error: { message: "Incorrect password" } };
     }
 
-    // Create session data
-    const sessionData = { id: user.id, email: user.email, name: user.name };
-    console.log("Creating session for user:", sessionData);  // Debug log
+    // Create session data for the user
+    const sessionData = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role || "user", // Assign default "user" role if not defined
+    };
+    console.log("Creating session for user:", sessionData); // Debug log
     const session = await encrypt(sessionData);
 
-    // Set session cookie
     const expires = new Date(Date.now() + timeout * 1000);
-    const cookiesResponse = await cookies(); // Awaiting cookies to handle async correctly
+    const cookiesResponse = await cookies();
     cookiesResponse.set("session", session, {
-      expires, 
-      httpOnly: true, // Ensures that the cookie is only accessible via HTTP requests
-      secure: process.env.NODE_ENV === "production", // Only send over HTTPS in production
-      sameSite: "Strict", // Ensures that the cookie is sent only for requests to the same site
+      expires,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
     });
 
-    console.log("Session cookie set:", { expires, session });  // Debug log
-
-    return { message: "Login Success" };
-
+    return { message: "Login Success" }; // No redirect for regular users
   } catch (error) {
     console.error("Error during login:", error);
     return { error: { message: "An error occurred during login" } };
@@ -127,6 +162,24 @@ export async function getSession() {
     console.error("Error verifying session:", error);  // Error handling
     return null;  // Return null if session verification fails
   }
+}
+
+export async function updateSession(request: NextRequest) {
+  const session = request.cookies.get("session")?.value;
+  if (!session) return;
+
+  // Refresh the session so it doesn't expire
+  const parsed = await decrypt(session);
+  parsed.expires = new Date(Date.now() + TIMEOUT * 1000);
+  const res = NextResponse.next();
+  res.cookies.set({
+    name: "session",
+    // secure: true,   // if https is used
+    value: await encrypt(parsed),
+    httpOnly: true,
+    expires: parsed.expires,
+  });
+  return res;
 }
 
 

@@ -4,7 +4,7 @@ import { cookies } from "next/headers"; // Use cookies from the server-side
 import { jwtVerify } from "jose";
 import prisma from "@/utils/db"; // Ensure to import prisma client correctly
 import ReserveRoomForm from "./form";
-import ReservationList from "./ReservationList"; // Import the ReservationList component
+import ReservationList from "../components/ReservationList"; // Import the ReservationList component
 import Link from "next/link";
 
 const RoomPage = async () => {
@@ -53,8 +53,8 @@ const RoomPageClient = ({ sessionData, reservations }: { sessionData: any, reser
     <div
       className="p-8 max-w-full mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8"
       style={{
-        backgroundImage: "url('/wallpaper-2.png')",
-        backgroundSize: "106%", // Adjust background size as per your requirement
+        backgroundImage: "url('/wallpaper-2v.png')",
+        backgroundSize: "100%", // Adjust background size as per your requirement
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}

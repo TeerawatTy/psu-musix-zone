@@ -27,7 +27,7 @@ export default function LoginPage() {
     const validationResult = loginSchema.safeParse({ email, password });
 
     if (!validationResult.success) {
-      const errorMessage = validationResult.error.errors.map(err => err.message).join(", ");
+      const errorMessage = validationResult.error.errors.map((err) => err.message).join(", ");
       setError(errorMessage); // Show validation error
       return;
     }
@@ -37,9 +37,12 @@ export default function LoginPage() {
 
     if (result?.error) {
       setError(result.error.message); // Show error message
+    } else if (result?.redirectTo) {
+      // Redirect admin to the admin page
+      router.push(result.redirectTo);
     } else {
-      // After login success, trigger refresh and redirect to home
-      router.push("/"); // Redirect to the homepage
+      // Redirect regular users to the homepage
+      router.push("/");
       window.location.reload(); // Refresh the page
     }
   };
@@ -117,4 +120,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
