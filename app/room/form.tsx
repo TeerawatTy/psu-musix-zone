@@ -34,7 +34,7 @@ const ReserveRoomForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 max-w-md mx-auto bg-white shadow-md rounded-md">
+    <form onSubmit={handleSubmit} className="space-y-4 p-4 max-w-md mx-auto bg-white shadow-md rounded-md text-black">
       <h2 className="text-2xl font-bold">Reserve a Room</h2>
       <div>
         <label className="block text-sm font-semibold">Room Number</label>

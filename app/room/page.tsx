@@ -1,53 +1,63 @@
-"use client";
+// room/page.tsx
 
-import { useEffect, useState } from "react";
-import { getSession } from "@/utils/loginUser";  // Importing the custom function
-import { NextResponse } from "next/server";  // Optional: Use this if you want server-side redirect handling
+import { cookies } from "next/headers";
+import { jwtVerify } from "jose";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter for navigation
 
-export default function RoomPage() {
-  const [session, setSession] = useState(null);
-  const [error, setError] = useState(null);
+const RoomPage = async () => {
+  const secretKey = process.env.SECRET;
+  const key = new TextEncoder().encode(secretKey);
+  let sessionCookie = null;
+  let sessionData = null;
 
-  // This effect runs when the page is loaded on the client side
-  useEffect(() => {
-    // Asynchronously get the session cookie on the client side
-    const fetchSession = async () => {
-      try {
-        const sessionData = await getSession(); // Get session data using the utility function
-        if (sessionData) {
-          setSession(sessionData);  // If session exists, store in state
-        } else {
-          setError("No session found, please log in.");
-        }
-      } catch (err) {
-        setError("An error occurred while fetching session.");
-        console.error("Session fetch error:", err);
-      }
-    };
+  try {
+    // Fetch the raw session cookie (async call)
+    const cookieStore = await cookies(); // Await the cookies() API
+    sessionCookie = cookieStore.get("session")?.value;
 
-    fetchSession();  // Call fetchSession when the page mounts
-  }, []);
+    if (sessionCookie) {
+      // Decode the session cookie if present
+      const { payload } = await jwtVerify(sessionCookie, key, { algorithms: ["HS256"] });
+      sessionData = payload; // Extracted session data (name, email, etc.)
+    }
+  } catch (error) {
+    console.error("Error handling session cookie:", error);
+  }
+
+  // Redirect user to login page if no session cookie is found
+  if (!sessionCookie) {
+    return (
+      <div className="p-4 max-w-md mx-auto bg-white shadow-md rounded-md text-black">
+        <p className="text-red-500 mb-4">Session cookie not found. Please log in.</p>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h1>Room Page</h1>
+    <div className="p-4 max-w-md mx-auto bg-white shadow-md rounded-md text-black">
+      <h1 className="text-2xl font-bold mb-4">Room Reservations</h1>
 
-      {/* Show session information if it exists */}
-      {session ? (
+      {sessionCookie ? (
         <div>
-          <h2>Welcome, {session.name}!</h2>
-          <p>Email: {session.email}</p>
-          <p>Session ID: {session.id}</p>
-        </div>
-      ) : (
-        <div>
-          {error ? (
-            <p>{error}</p>
+          <h2 className="text-xl font-semibold">Raw Session Cookie:</h2>
+          <p className="break-words mb-4">{sessionCookie}</p>
+
+          {sessionData ? (
+            <div>
+              <h2 className="text-xl font-semibold">Decoded Session Data:</h2>
+              <p>Name: {sessionData.name}</p>
+              <p>Email: {sessionData.email}</p>
+            </div>
           ) : (
-            <p>Loading session...</p>
+            <p className="text-red-500">Unable to decode session data.</p>
           )}
         </div>
+      ) : (
+        <p className="text-red-500">No session cookie found. Redirecting...</p>
       )}
     </div>
   );
-}
+};
+
+export default RoomPage;

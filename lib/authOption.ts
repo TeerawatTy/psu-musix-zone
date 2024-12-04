@@ -1,6 +1,6 @@
-// lib/authOptions.ts
 import CredentialsProvider from "next-auth/providers/credentials";
-import { hashPassword } from "@/utils/hashPassword"; // Your password hashing utility
+import bcrypt from "bcrypt";  // Make sure bcrypt is installed
+import { prisma } from "@/lib/prisma";  // Ensure you're correctly importing your prisma instance
 
 export const authOptions = {
   providers: [
@@ -11,18 +11,24 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials?.email },
+          });
 
-        if (user && (await hashPassword(credentials.password)) === user.password) {
-          return { id: user.id, email: user.email, name: user.name };
+          // Check if user exists and compare hashed password with the provided password
+          if (user && bcrypt.compareSync(credentials?.password || "", user.password)) {
+            return { id: user.id, email: user.email, name: user.name };
+          }
+          return null;  // If credentials don't match, return null
+        } catch (error) {
+          console.error("Error during user authorization:", error);
+          return null;
         }
-        return null;  // If credentials don't match, return null
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,  // Set in .env
+  secret: process.env.NEXTAUTH_SECRET,  // Make sure the secret is defined in your .env
   session: {
     strategy: "jwt",  // Use JWT for session management
   },

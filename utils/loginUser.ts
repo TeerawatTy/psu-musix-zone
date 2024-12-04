@@ -145,3 +145,17 @@ export async function getSession() {
     return null;
   }
 }
+
+// export async function getSession() {
+//   try {
+//     const cookieStore = cookies();
+//     const sessionCookie = cookieStore.get("next-auth.session-token");  // Replace with your actual cookie name
+//     if (!sessionCookie) return null;
+
+//     const sessionData = JSON.parse(sessionCookie.value);
+//     return sessionData;  // This is your session data (e.g., user info)
+//   } catch (err) {
+//     console.error("Error getting session:", err);
+//     return null;
+//   }
+// }
