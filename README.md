@@ -1,3 +1,21 @@
+# PSU Musix Zone Website 🎵
+Welcome to the PSU Musix Zone GitHub repository! This is the official source code for the web platform developed for the University Music Club at PSU, designed to manage music practice room reservations, showcase upcoming events, and provide an interactive user experience for all club members and visitors.
+
+## Features 🧩
+✨Login/Registration: Users can sign up and log in to manage their personal profiles and reservations.
+✨Room Reservation: A user-friendly interface to reserve practice rooms. It allows users to select the date, time, and room, ensuring no overlaps with other users. Reservations are allowed only during specific hours (8:00 AM - 6:00 PM).
+✨Upcoming Events: View and read more about upcoming club events like workshops, concerts, and social gatherings.
+✨User Profile Management: Users can view and edit their personal information, and see their upcoming room reservations.
+✨Admin Dashboard: Admins can manage user accounts, view all reservations, and make adjustments as needed.
+
+## Technology Stack 🤖
+ Frontend: Built using Next.js (React-based framework) for an optimal web experience.
+- Backend: Implemented with Next.js API Routes and TypeScript for better type safety and developer experience.
+- Database: Prisma ORM connected to a SQLite/PostgreSQL database to store user information, reservations, and event data.
+- Authentication: Managed with session-based authentication, ensuring users are logged in before making reservations or editing their profile.
+- Calendar Integration: Allows users to select reservation times from an interactive calendar.
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -5,13 +23,12 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the development server:
 
 ```bash
+git clone https://github.com/TeerawatTy/psu-musix-zone.git
+cd psu-musix-zone
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx prisma migrate dev
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
