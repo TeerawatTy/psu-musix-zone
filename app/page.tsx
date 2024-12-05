@@ -1,7 +1,9 @@
 // app/page.tsx
-import Image from 'next/image';
-import Link from 'next/link';
-import EventsSection from './components/EventsSection';
+
+
+import Image from "next/image";
+import Link from "next/link";
+import EventsSection from "./components/EventsSection"; // Import the EventsSection
 
 export default function HomePage() {
   return (
@@ -11,9 +13,9 @@ export default function HomePage() {
         className="relative flex flex-col items-center justify-center h-[720px] text-center"
         style={{
           backgroundImage: 'url("/wallpaper-3.png")',
-          backgroundSize: '1920px 960px',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
+          backgroundSize: "110%",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
         }}
       >
         {/* Overlay */}
@@ -26,22 +28,28 @@ export default function HomePage() {
               Welcome to the <span className="text-orange-500">PSU Musix Zone</span>
             </h1>
             <p className="mt-4 text-lg max-w-md mx-auto">
-              Your one-stop destination for music room reservations and equipment rentals.
+            Discover the heartbeat of PSU Music Club
+            </p>
+            <p className="mt-4 text-lg max-w-สห mx-auto">
+            your gateway to reserving practice rooms, accessing top-notch equipment, and joining a vibrant community of music enthusiasts.
             </p>
           </div>
 
           {/* Buttons */}
           <div className="flex space-x-6 mt-6">
-            <Link href="/room" className="px-6 py-3 text-xl font-semibold text-black bg-orange-500 rounded-lg hover:bg-orange-400">
+            <Link
+              href="/room"
+              className="px-6 py-3 text-2xl font-semibold text-white bg-orange-600 rounded-lg hover:bg-orange-500"
+            >
               Reserve Rooms
-            </Link>
-            <Link href="/equipment" className="px-6 py-3 text-xl font-semibold text-black bg-gray-200 rounded-lg hover:bg-gray-100">
-              Up Coming Events
             </Link>
           </div>
         </div>
       </div>
 
+      {/* Events Section */}
+      <EventsSection />
     </div>
   );
 }
+

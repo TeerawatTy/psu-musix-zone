@@ -96,11 +96,11 @@ const RoomPageClient = ({ sessionData, reservations, errorMessage }: { sessionDa
           </div>
         ) : (
           <div>
-            <p className="text-red-500 my-4 text-center">
+            <p className="text-red-500 my-4 text-center text-xl">
               Session cookie not found. Please log in to make a reservation.
             </p>
             <Link href="/login" className="flex items-center justify-center mt-10">
-              <span className="text-black font-bold px-6 py-2 border-2 border-black rounded-md hover:bg-orange-500 hover:text-white hover:border-white transition duration-200">Login</span>
+              <span className="text-white text-2xl font-bold px-6 py-2 border-2 border-white rounded-md hover:bg-orange-500 hover:text-white hover:border-white transition duration-200">Login</span>
             </Link>
           </div>
         )}

@@ -24,19 +24,19 @@ const Footer = () => {
         <div className="flex flex-col items-center md:items-end">
           <nav className="flex flex-col md:flex-row space-x-0 md:space-x-4 mb-2">
             <Link href="/" className="hover:text-orange-500 mb-2 md:mb-0">Home</Link>
-            <Link href="/events" className="hover:text-orange-500 mb-2 md:mb-0">Events</Link>
+            <Link href="/#events-section" className="hover:text-orange-500 mb-2 md:mb-0">Events</Link>
             <Link href="/room" className="hover:text-orange-500 mb-2 md:mb-0">Practice Room</Link>
             <Link href="/aboutUs" className="hover:text-orange-500 mb-2 md:mb-0">About Us</Link>
             <Link href="/login" className="hover:text-orange-500">Login</Link>
           </nav>
           <div className="flex space-x-4">
-            <Link href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+            <Link href="https://www.facebook.com/psumusiczone" target="_blank" rel="noopener noreferrer">
               <img src="https://img.icons8.com/ios-filled/50/FFFFFF/facebook-new.png" alt="Facebook" className="h-8" />
             </Link>
-            <Link href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <Link href="https://www.instagram.com/psumusiczone/" target="_blank" rel="noopener noreferrer">
               <img src="https://img.icons8.com/ios-glyphs/50/FFFFFF/instagram-circle.png" alt="Instagram" className="h-8" />
             </Link>
-            <Link href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+            <Link href="https://www.youtube.com/watch?v=vtv4sZyvx8g&list=PLZLnKeFL2bIoIuFgR9TA1bja09vjUtlIS" target="_blank" rel="noopener noreferrer">
               <img src="https://img.icons8.com/ios-filled/50/FFFFFF/youtube-play.png" alt="YouTube" className="h-8" />
             </Link>
           </div>
