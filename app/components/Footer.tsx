@@ -8,7 +8,8 @@ const Footer = () => {
       className="text-white p-6 bg-cover bg-center"
       style={{
         backgroundImage: "url('/wallpaper-1.png')",
-        backgroundSize: "103%",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
       }}
     >
       <div className="flex flex-col md:flex-row justify-between items-center b-48">
@@ -60,7 +61,7 @@ const Footer = () => {
       </div>
 
 
-      <p className="text-center mb-2 text-gray-700">© 2024 PSU Musix Zone. All rights reserved.</p>
+      <p className="text-center mb-2 pt-6 text-gray-700">© 2024 PSU Musix Zone. All rights reserved.</p>
     </footer>
   );
 };
