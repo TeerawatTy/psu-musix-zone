@@ -1,4 +1,4 @@
-## PSU Musix Zone Website
+## PSU Musix Zone Website 🎵
 Welcome to the PSU Musix Zone GitHub repository! This is the official source code for the web platform developed for the University Music Club at PSU, designed to manage music practice room reservations, showcase upcoming events, and provide an interactive user experience for all club members and visitors.
 
 # Features 🧩
