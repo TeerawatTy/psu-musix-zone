@@ -61,7 +61,7 @@ export default function LoginPage() {
       className="flex items-center justify-center min-h-[720px] bg-gray-100"
       style={{
         backgroundImage: 'url("/wallpaper-2.png")',
-        backgroundSize: "100%",
+        backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
       }}

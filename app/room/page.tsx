@@ -61,7 +61,7 @@ const RoomPageClient = ({ sessionData, reservations, errorMessage }: { sessionDa
       className="p-8 max-w-full mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8"
       style={{
         backgroundImage: "url('/wallpaper-2v.png')",
-        backgroundSize: "100%",
+        backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}

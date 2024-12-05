@@ -45,7 +45,7 @@ const AboutUsPage = () => {
       className="min-h-screen bg-black text-white"
       style={{
         backgroundImage: 'url("/wallpaper-2v.png")',
-        backgroundSize: "100%",
+        backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
       }}

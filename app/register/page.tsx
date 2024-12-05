@@ -54,7 +54,7 @@ export default function Register() {
       className="flex items-center justify-center h-[720px] bg-gray-100"
       style={{
         backgroundImage: 'url("/wallpaper-2.png")',
-        backgroundSize: "1920px 960px",
+        backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
       }}
