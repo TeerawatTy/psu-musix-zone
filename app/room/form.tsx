@@ -99,7 +99,7 @@ const ReservationForm = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
+    <div className="w-full mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Make a Reservation</h2>
 
       {/* Display success or error messages */}
@@ -108,7 +108,7 @@ const ReservationForm = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="form-group">
-          <label htmlFor="roomNumber" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="roomNumber" className="text-sm font-bold text-gray-700">
             Room Number
           </label>
           <input
@@ -117,7 +117,7 @@ const ReservationForm = () => {
             name="roomNumber"
             value={formData.roomNumber}
             onChange={handleChange}
-            className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
             placeholder="Enter room number"
           />
         </div>
@@ -132,7 +132,7 @@ const ReservationForm = () => {
             name="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleChange}
-            className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
             placeholder="Enter phone number"
           />
         </div>
@@ -161,7 +161,7 @@ const ReservationForm = () => {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-2 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${loading ? 'bg-gray-400' : 'bg-orange-500 hover:bg-orange-600'}`}
+          className={`w-72 py-2 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${loading ? 'bg-gray-400' : 'bg-orange-500 hover:bg-orange-600'}`}
         >
           {loading ? "Submitting..." : "Submit"}
         </button>

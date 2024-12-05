@@ -84,15 +84,20 @@ const ReservationList = () => {
       )}
 
       {/* Scrollable reservation list */}
-      <div className="grid grid-cols-1 gap-6 max-h-[960px] overflow-y-auto">
+      <div className="p-10 grid grid-cols-1 gap-6 max-h-[960px] overflow-y-auto ">
         {reservations.map((reservation) => (
           <div
             key={reservation.id}
-            className="p-6 bg-white rounded-lg shadow-lg flex flex-col space-y-4 transition-transform transform hover:scale-105 hover:shadow-xl"
+            className="border-2 border-gray-200 p-6 max-w-[720px] bg-white rounded-lg shadow-lg flex flex-col space-y-4 transition-transform transform hover:scale-105 hover:shadow-xl"
           >
             <div className="flex justify-between items-center">
-              <p className="text-2xl font-semibold text-gray-800">Room {reservation.roomNumber}</p>
-              <p className="text-gray-500 text-lg">{new Date(reservation.startTime).toLocaleDateString()}</p>
+              <p className="text-3xl font-black text-gray-800">Room {reservation.roomNumber}</p>
+              <div className="flex items-center space-x-2 text-gray-600">
+                <FaCalendarAlt className="text-orange-500 text-xl" />
+                <span className="font-bold text-xl">
+                  {new Date(reservation.startTime).toLocaleDateString()}
+                </span>
+              </div>
             </div>
             <div className="flex items-center space-x-2 text-gray-600">
               <FaClock className="text-green-500" />
@@ -112,12 +117,12 @@ const ReservationList = () => {
                 <strong>Phone Number:</strong> {reservation.phoneNumber}
               </span>
             </div>
-            <div className="flex items-center space-x-2 text-gray-600">
+            {/* <div className="flex items-center space-x-2 text-gray-600">
               <FaCalendarAlt className="text-orange-500" />
               <span>
                 <strong>Reservation Date:</strong> {new Date(reservation.startTime).toLocaleDateString()}
               </span>
-            </div>
+            </div> */}
 
             {/* Admin Edit and Delete Buttons */}
             {isAdmin && (

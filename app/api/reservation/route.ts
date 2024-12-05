@@ -40,15 +40,40 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// GET method for fetching reservations
+// // GET method for fetching reservations
+// export async function GET(req: NextRequest) {
+//   try {
+//     const reservations = await prisma.reservation.findMany({
+//       where: {
+//         endTime: { gte: new Date() },
+//       },
+//       include: {
+//         user: true,
+//       },
+//     });
+
+//     return NextResponse.json({ reservations });
+//   } catch (error) {
+//     console.error("Error fetching reservations:", error);
+//     return NextResponse.json({ message: 'Failed to fetch reservations.' }, { status: 500 });
+//   }
+// }
+
 export async function GET(req: NextRequest) {
+  const userId = req.nextUrl.searchParams.get('userId'); // Get userId from query params
+
+  if (!userId) {
+    return NextResponse.json({ message: "User ID is required." }, { status: 400 });
+  }
+
   try {
     const reservations = await prisma.reservation.findMany({
       where: {
-        endTime: { gte: new Date() },
+        userId: parseInt(userId), // Filter reservations by the logged-in user ID
+        endTime: { gte: new Date() }, // Ensure the reservation is upcoming
       },
       include: {
-        user: true,
+        user: true, // Include user details with the reservation
       },
     });
 
@@ -94,26 +119,16 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-const handleDelete = async (id: number) => {
-  setLoading(true); // Optionally show loading state
+export async function DELETE(req: Request) {
+  const id = req.url.split("/").pop();
+
   try {
-    const response = await fetch(`/api/reservation/${id}`, {
-      method: 'DELETE',
+    await prisma.reservation.delete({
+      where: { id: Number(id) },
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Error deleting reservation');
-    }
-
-    // Successfully deleted the reservation
-    alert("Reservation deleted successfully!");
-    onDelete(id); // Trigger the parent's delete callback (to update UI)
+    return NextResponse.json({ message: "Reservation deleted successfully!" });
   } catch (error) {
     console.error("Error deleting reservation:", error);
-    setError("An unexpected error occurred. Please try again later.");
-  } finally {
-    setLoading(false);
+    return NextResponse.json({ error: "Failed to delete reservation." }, { status: 500 });
   }
-};
+}

@@ -60,14 +60,21 @@ const RoomPageClient = ({ sessionData, reservations }: { sessionData: any, reser
       }}
     >
       {/* Left Column for Reservation List */}
-      <div className="bg-white bg-opacity-50 p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Upcoming Reservations</h2>
+      <div className="bg-white bg-opacity-50 p-6 rounded-lg shadow-lg p-10">
+        <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">UPCOMING RESERVATIONS</h2>
         <ReservationList reservations={reservations} />
       </div>
 
       {/* Right Column for Reservation Form */}
-      <div className="bg-white bg-opacity-50 p-6 rounded-lg shadow-lg w-full">
-        <h1 className="text-3xl font-bold text-gray-800 mt-6 text-center">Practice Room Reservations</h1>
+      <div className=" p-24 rounded-lg shadow-lg w-full"
+      style={{
+        backgroundImage: "url('/wallpaper-0v.png')",
+        backgroundSize: "100%", // Adjust background size as per your requirement
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+      >
+        <h1 className="text-3xl font-bold text-white  mt-6 text-center">PRACTICE ROOM RESERVATIONS</h1>
         {sessionData ? (
           <div>
             <h2 className="text-2xl text-orange-500  mt-2 mb-10 text-center">Welcome!, {sessionData?.name}</h2>
