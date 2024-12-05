@@ -172,7 +172,7 @@ const UserPage = () => {
 
   return (
     <div
-      className="w-full"
+      className="w-full min-h-[725px]"
       style={{
         backgroundImage: "url('/wallpaper-2v.png')",
         backgroundSize: "cover",
