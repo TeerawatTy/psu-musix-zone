@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { getSession } from "@/utils/loginUser";
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import EditForm from '../components/EditForm';
+import { avatarIcons } from "@/utils/avatarIcons"; // Importing avatarIcons array
 
 export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -173,8 +174,13 @@ export default function AdminPage() {
               key={user.id}
               className="bg-white rounded-lg shadow-xl p-6 flex flex-col items-center text-center transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
             >
-              <div className="w-24 h-24 rounded-full bg-gray-300 mb-4">
-                {/* Placeholder for Avatar */}
+              <div className="w-24 h-24 rounded-full bg-black mb-4 flex justify-center items-center">
+                {/* Random avatar from the avatarIcons array */}
+                <img
+                  src={avatarIcons[Math.floor(Math.random() * avatarIcons.length)]}
+                  alt="User Avatar"
+                  className="h-16 w-16 object-cover rounded-full"
+                />
               </div>
               <h3 className="text-xl font-semibold text-gray-800">{user.name}</h3>
               <p className="text-gray-500">{user.email}</p>
@@ -205,7 +211,7 @@ export default function AdminPage() {
         )}
 
         {/* Reservations List */}
-        <div className="p-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 max-h-[960px] overflow-y-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {reservations.length === 0 ? (
             <p className="text-white p-6">No upcoming reservations</p>
           ) : (

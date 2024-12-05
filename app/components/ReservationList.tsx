@@ -25,7 +25,8 @@ const ReservationList = () => {
   // Fetch reservations from the API
   const fetchReservations = async () => {
     try {
-      const response = await fetch("/api/reservation");
+      // No userId parameter is passed for the room page
+      const response = await fetch("/api/reservation"); // Fetch all reservations (no userId param)
       if (!response.ok) {
         throw new Error("Failed to fetch reservations");
       }
@@ -47,18 +48,21 @@ const ReservationList = () => {
     if (user?.role === "admin") {
       setIsAdmin(true); // Set admin status
     }
-    fetchReservations(); // Fetch reservations after user check
+    fetchReservations(); // Fetch all reservations when the page loads
   }, []);
 
   // Handle editing a reservation
   const handleEdit = (id: number) => {
     console.log("Editing reservation with ID:", id);
-    // You can either navigate to an edit page or show a modal here
-    router.push(`/admin/edit/${id}`); // Assuming you have an edit page
+    // Navigate to the edit page for the reservation
+    router.push(`/admin/edit/${id}`);
   };
 
   // Handle deleting a reservation
   const handleDelete = async (id: number) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this reservation?");
+    if (!confirmDelete) return; // Abort if not confirmed
+
     try {
       const response = await fetch(`/api/reservation/${id}`, {
         method: "DELETE",
@@ -71,20 +75,23 @@ const ReservationList = () => {
       }
     } catch (err) {
       console.error("Error deleting reservation:", err);
+      alert("An error occurred while deleting the reservation.");
     }
   };
 
   return (
     <div className="w-full space-y-6 text-black">
       {/* Loading and error state */}
-      {loading && <p className="text-center text-gray-500">Loading reservations...</p>}
+      {loading && (
+        <p className="text-center text-gray-500">Loading reservations...</p>
+      )}
       {error && <p className="text-center text-red-500">{error}</p>}
       {reservations.length === 0 && !loading && !error && (
         <p className="text-center text-gray-500">No upcoming reservations.</p>
       )}
 
       {/* Scrollable reservation list */}
-      <div className="p-10 grid grid-cols-1 gap-6 max-h-[960px] overflow-y-auto ">
+      <div className="p-10 grid grid-cols-1 gap-6 max-h-[960px] overflow-y-auto">
         {reservations.map((reservation) => (
           <div
             key={reservation.id}
@@ -117,12 +124,6 @@ const ReservationList = () => {
                 <strong>Phone Number:</strong> {reservation.phoneNumber}
               </span>
             </div>
-            {/* <div className="flex items-center space-x-2 text-gray-600">
-              <FaCalendarAlt className="text-orange-500" />
-              <span>
-                <strong>Reservation Date:</strong> {new Date(reservation.startTime).toLocaleDateString()}
-              </span>
-            </div> */}
 
             {/* Admin Edit and Delete Buttons */}
             {isAdmin && (

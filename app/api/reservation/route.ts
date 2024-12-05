@@ -59,23 +59,34 @@ export async function POST(req: NextRequest) {
 //   }
 // }
 
+// GET method for fetching all reservations or user-specific reservations
 export async function GET(req: NextRequest) {
   const userId = req.nextUrl.searchParams.get('userId'); // Get userId from query params
 
-  if (!userId) {
-    return NextResponse.json({ message: "User ID is required." }, { status: 400 });
-  }
-
+  let reservations;
   try {
-    const reservations = await prisma.reservation.findMany({
-      where: {
-        userId: parseInt(userId), // Filter reservations by the logged-in user ID
-        endTime: { gte: new Date() }, // Ensure the reservation is upcoming
-      },
-      include: {
-        user: true, // Include user details with the reservation
-      },
-    });
+    if (userId) {
+      // If userId is provided, fetch only the reservations for that user
+      reservations = await prisma.reservation.findMany({
+        where: {
+          userId: parseInt(userId),
+          endTime: { gte: new Date() }, // Ensure the reservation is upcoming
+        },
+        include: {
+          user: true, // Include user details with the reservation
+        },
+      });
+    } else {
+      // If no userId is provided, fetch all upcoming reservations
+      reservations = await prisma.reservation.findMany({
+        where: {
+          endTime: { gte: new Date() }, // Ensure the reservation is upcoming
+        },
+        include: {
+          user: true, // Include user details with the reservation
+        },
+      });
+    }
 
     return NextResponse.json({ reservations });
   } catch (error) {
@@ -83,6 +94,31 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ message: 'Failed to fetch reservations.' }, { status: 500 });
   }
 }
+
+// export async function GET(req: NextRequest) {
+//   const userId = req.nextUrl.searchParams.get('userId'); // Get userId from query params
+
+//   if (!userId) {
+//     return NextResponse.json({ message: "User ID is required." }, { status: 400 });
+//   }
+
+//   try {
+//     const reservations = await prisma.reservation.findMany({
+//       where: {
+//         userId: parseInt(userId), // Filter reservations by the logged-in user ID
+//         endTime: { gte: new Date() }, // Ensure the reservation is upcoming
+//       },
+//       include: {
+//         user: true, // Include user details with the reservation
+//       },
+//     });
+
+//     return NextResponse.json({ reservations });
+//   } catch (error) {
+//     console.error("Error fetching reservations:", error);
+//     return NextResponse.json({ message: 'Failed to fetch reservations.' }, { status: 500 });
+//   }
+// }
 
 export async function PUT(req: NextRequest) {
   const { id } = req.nextUrl.query; // Get the reservation ID from the URL

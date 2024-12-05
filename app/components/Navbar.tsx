@@ -34,15 +34,20 @@ const Navbar = () => {
 
   // Handle User Profile Click
   const handleUserProfileClick = () => {
-    // Navigate to the /user page when the SVG icon is clicked
-    router.push('/user');
+    if (user?.role === "admin") {
+      // Redirect admin to the /admin/page
+      router.push('/admin');
+    } else {
+      // Redirect normal user to the /user page
+      router.push('/user');
+    }
   };
 
   if (!isClient) return null; // Only render on the client-side
 
   return (
     <nav className="w-full flex justify-between items-center text-white py-4 px-6">
-      {/* Left Section: Home Icon and Username */}
+      {/* Left Section: User Icon */} 
       <div className="flex items-center pl-6">
         {user && (
           <svg
@@ -51,7 +56,7 @@ const Navbar = () => {
             height="35"
             viewBox="0 0 48 48"
             className="transition-transform duration-150 ease-in-out hover:scale-125 cursor-pointer"
-            onClick={handleUserProfileClick} // Trigger navigation to /user on click
+            onClick={handleUserProfileClick} // Trigger navigation based on user role
           >
             <path
               d="M24,4C12.972,4,4,12.972,4,24s8.972,20,20,20s20-8.972,20-20S35.028,4,24,4z M24,13c2.761,0,5,2.239,5,5	c0,2.761-2.239,5-5,5s-5-2.239-5-5C19,15.239,21.239,13,24,13z M33,29.538C33,32.397,29.353,35,24,35s-9-2.603-9-5.462v-0.676	C15,27.834,15.834,27,16.862,27h14.276C32.166,27,33,27.834,33,28.862V29.538z"

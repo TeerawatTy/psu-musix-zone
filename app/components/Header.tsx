@@ -36,11 +36,11 @@ const Header = () => {
           <span>PSU MUSIX ZONE</span>
         </Link>
         <div className="hidden md:flex space-x-6">
-          {isAdmin && (
+          {/* {isAdmin && (
             <h1 className="text-xl hover:text-orange-500">
               <Link href="/admin">ADMIN</Link>
             </h1>
-          )}
+          )} */}
           <h1 className="text-xl hover:text-orange-500">
             <Link href="/events">EVENTS</Link>
           </h1>
