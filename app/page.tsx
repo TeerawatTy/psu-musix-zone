@@ -13,7 +13,7 @@ export default function HomePage() {
         className="relative flex flex-col items-center justify-center h-[720px] text-center"
         style={{
           backgroundImage: 'url("/wallpaper-3.png")',
-          backgroundSize: "110%",
+          backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
         }}
