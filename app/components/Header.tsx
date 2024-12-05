@@ -69,7 +69,7 @@ const Header = () => {
       {menuOpen && (
         <div className="md:hidden mt-4 w-full bg-black bg-opacity-80 p-4 rounded-lg text-center">
           <h1 className="text-xl hover:text-orange-500 mb-2">
-            <Link href="#events-section" onClick={() => setMenuOpen(false)}>
+            <Link href="/#events-section" onClick={() => setMenuOpen(false)}>
               EVENTS
             </Link>
           </h1>

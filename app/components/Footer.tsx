@@ -46,18 +46,18 @@ const Footer = () => {
 
       {/* Bottom Section for Sponsor Logos */}
       <div className="flex flex-wrap justify-center space-x-4 space-y-2 my-6 h-16">
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/guitar.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/classic-music.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/metronome.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/guitar-amp.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/micro.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/bass-drum.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/electronic-music.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/rock-music.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/xylophone.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/music-record.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/cello.png" alt="item" className="h-10 hover:h-11" />
-        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/saxophone.png" alt="item" className="h-10 hover:h-11" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/guitar.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/classic-music.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/metronome.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/guitar-amp.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/micro.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/bass-drum.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/electronic-music.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/rock-music.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/xylophone.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/music-record.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/cello.png" alt="item" className="h-10 hover:h-11 md:h-6" />
+        <img src="https://img.icons8.com/ios-filled/40/FFFFFF/saxophone.png" alt="item" className="h-10 hover:h-11 md:h-6" />
       </div>
 
 

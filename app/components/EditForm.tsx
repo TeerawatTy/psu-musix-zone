@@ -84,7 +84,7 @@ const EditForm: React.FC<EditFormProps> = ({ reservation, onSubmit, onCancel }) 
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md w-full">
+    <div className="p-6 sm:p-8 md:p-10 bg-white rounded-lg shadow-md w-full max-w-lg mx-auto">
       <h2 className="text-xl font-semibold text-center mb-4 text-black">Edit Reservation</h2>
 
       {error && <div className="text-red-500 text-center mb-4">{error}</div>}

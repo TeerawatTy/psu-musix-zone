@@ -122,8 +122,8 @@ const ReservationForm = () => {
   };
 
   return (
-    <div className="w-full mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Make a Reservation</h2>
+    <div className="w-full mx-auto p-6 sm:p-8 bg-gray-50 rounded-lg shadow-lg">
+      <h2 className="text-2xl sm:text-3xl font-semibold text-center text-gray-800 mb-6">Make a Reservation</h2>
 
       {/* Display success or error messages */}
       {success && <div className="text-green-500 text-center mb-4">Reservation was successful!</div>}
@@ -184,7 +184,7 @@ const ReservationForm = () => {
         <button
           type="submit"
           disabled={loading}
-          className={`w-72 py-2 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${loading ? 'bg-gray-400' : 'bg-orange-500 hover:bg-orange-600'}`}
+          className={`py-2 px-16 w-full sm:w-auto text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${loading ? 'bg-gray-400' : 'bg-orange-500 hover:bg-orange-600'}`}
         >
           {loading ? "Submitting..." : "Submit"}
         </button>
