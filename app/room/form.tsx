@@ -40,17 +40,43 @@ const ReservationForm = () => {
       }
     }
 
+    // Convert startTime to a Date object
+    const startDate = new Date(formData.startTime);
+    const startHour = startDate.getHours();
+
+    // Check if the start time is within the allowed range (8:00 AM to 6:00 PM)
+    if (startHour < 8 || startHour >= 18) {
+      setError("Reservation time must be between 8:00 AM and 6:00 PM.");
+      return;
+    }
+
     setLoading(true);
     setError("");
     setSuccess(false);
 
     try {
-      const response = await fetch("/api/reservation", {
+      // Check if there are any conflicting reservations in the database
+      const checkResponse = await fetch(`/api/reservation/check-conflict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData), // Send formData including startTime and endTime
+      });
+
+      const checkData = await checkResponse.json();
+      if (!checkResponse.ok || checkData.conflict) {
+        setError("This time slot is already reserved. Please choose another time.");
+        return;
+      }
+
+      // Proceed to submit the reservation
+      const response = await fetch("/api/reservation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -81,10 +107,7 @@ const ReservationForm = () => {
 
   // Handles date selection from Calendar
   const handleDateSelect = (date: Date) => {
-    // Adjust the date to the local time (no timezone offset adjustment)
     const localDate = new Date(date);
-
-    // Ensure we are storing and displaying the correct local start time
     const formattedStartTime = localDate.toLocaleString(); // Use local time format for display
 
     // Calculate end time (e.g., adding 2 hours for the reservation)
